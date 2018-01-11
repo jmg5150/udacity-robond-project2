@@ -1,5 +1,10 @@
-## Project: Kinematics Pick & Place
-### Writeup Template: You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
+## Project 2: Kinematics Pick & Place
+Project submission for the Udacity Robotics Software Engineer Nanodegree
+Jonathan Georgino
+
+---
+
+### This project writeup is based on the sample template provided in the base repo provided by Udacity.
 
 ---
 
@@ -29,7 +34,7 @@
 
 #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
 
-You're reading it!
+This document is intended to fullfil the requirement of the Writeup / Readme.
 
 ### Kinematic Analysis
 #### 1. Run the forward_kinematics demo and evaluate the kr210.urdf.xacro file to perform kinematic analysis of Kuka KR210 robot and derive its DH parameters.
