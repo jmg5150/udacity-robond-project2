@@ -1,6 +1,8 @@
 ## Project 2: Kinematics Pick & Place
 Project submission for the Udacity Robotics Software Engineer Nanodegree
+
 Jonathan Georgino
+January 11 2018
 
 ---
 
@@ -19,7 +21,7 @@ Jonathan Georgino
 [figure8]: ./figures/figure8.png 
 [projectsummary]: ./figures/projectsummary.png 
 
-[projectsummary]
+![projectsummary]
 
 You can watch a successful pick and place cycle of the simulated KR210 pick and place robot running my Inverse Kinematics code [here](https://youtu.be/YELNEP8r350). Please note that due to the rather low resources available on the lubuntu VM running on my laptop, it is painfully slow. The video is 4:00 minutes in length and shows a single cycle. I am sure that no one wants to watch more than that :-P
 
@@ -37,27 +39,27 @@ This document is intended to fullfil the requirement of the Writeup / Readme.
 
 The following series of figures demonstrates the steps I took to derive the DH parameters of the Kuka KR210 robot
 
-[figure1]
+![figure1]
 
-[figure2]
+![figure2]
 
-[figure3]
+![figure3]
 
-[figure4]
+![figure4]
 
-[figure5]
+![figure5]
 
-[figure6]
+![figure6]
 
 I originally thought about drawing them by hand, but my artistic skills are rather poor. As such, I thought it would a worthwhile pursuit to try to easily create them on the computer. I was pleasantly surprised how simple it was to create the above figures in Google Slides using the predefined shapes.
 
 Finally, here is the DH Table that I arrived at:
 
-[figure7]
+![figure7]
 
 and the following table replaces the symbols with numeric values:
 
-[figure8]
+![figure8]
 
 #### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
 
