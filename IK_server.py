@@ -7,7 +7,9 @@
 #
 # All Rights Reserved.
 
-# Author: Harsh Pandya
+# Original Author: Harsh Pandya
+#
+# Updated to complete course requirements by Jonathan Georgino - 10 January 2018
 
 # import modules
 import rospy
@@ -58,7 +60,7 @@ class KR210Kinematics:
         # Define the symbols used in the rotation matrices
         r, p, y = symbols('r p y')
 
-        # Construct the DH Table, these values come from kr210.urdf.xacro file  
+        # Construct the DH Table
         DH_Table = {    alpha0:         0,  a0:      0,   d1:     0.75,   q1:           q1,
                         alpha1:   -pi/2.0,  a1:   0.35,   d2:        0,   q2: -pi/2.0 + q2,
                         alpha2:         0,  a2:   1.25,   d3:        0,   q3:           q3,
@@ -210,7 +212,7 @@ class KR210Kinematics:
         # Define the symbols used in the rotation matrices
         r, p, y = symbols('r p y')
 
-        # Construct the DH Table, these values come from kr210.urdf.xacro file  
+        # Construct the DH Table 
         DH_Table = {    alpha0:         0,  a0:      0,   d1:     0.75,   q1:           q1,
                         alpha1:   -pi/2.0,  a1:   0.35,   d2:        0,   q2: -pi/2.0 + q2,
                         alpha2:         0,  a2:   1.25,   d3:        0,   q3:           q3,
@@ -284,9 +286,9 @@ def handle_calculate_IK(req):
             # IK code starts here
             joint_trajectory_point = JointTrajectoryPoint()
 
-	    # Extract end-effector position and orientation from request
-	    # px,py,pz = end-effector position
-	    # roll, pitch, yaw = end-effector orientation
+        # Extract end-effector position and orientation from request
+        # px,py,pz = end-effector position
+        # roll, pitch, yaw = end-effector orientation
             px = req.poses[x].position.x
             py = req.poses[x].position.y
             pz = req.poses[x].position.z
@@ -311,8 +313,8 @@ def handle_calculate_IK(req):
 
             # Populate response for the IK request
             # In the next line replace theta1,theta2...,theta6 by your joint angle variables
-	    joint_trajectory_point.positions = [theta1, theta2, theta3, theta4, theta5, theta6]
-	    joint_trajectory_list.append(joint_trajectory_point)
+        joint_trajectory_point.positions = [theta1, theta2, theta3, theta4, theta5, theta6]
+        joint_trajectory_list.append(joint_trajectory_point)
 
         rospy.loginfo("length of Joint Trajectory List: %s" % len(joint_trajectory_list))
         return CalculateIKResponse(joint_trajectory_list)
