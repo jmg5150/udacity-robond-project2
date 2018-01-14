@@ -19,7 +19,8 @@ January 11 2018
 [figure6]: ./figures/figure6.png 
 [figure7]: ./figures/figure7.png 
 [figure8]: ./figures/figure8.png 
-[projectsummary]: ./figures/projectsummary.png 
+[projectsummary]: ./figures/projectsummary.png
+[tfmatrix]: ./figures/TFMatrix.png 
 
 ![projectsummary]
 
@@ -63,7 +64,19 @@ and the following table replaces the symbols with numeric values:
 
 #### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
 
-I used the following python code to create the individual transformation matrices for each joint.
+![tfmatrix]
+
+The following function is used to assist in building the homogeneous transforms for each of the links:
+```python
+def TF_Matrix(self, alpha, a, d, q):
+    TF = Matrix([[             cos(q),           -sin(q),            0,             a],
+                [   sin(q)*cos(alpha), cos(q)*cos(alpha),  -sin(alpha), -sin(alpha)*d],
+                [   sin(q)*sin(alpha), cos(q)*sin(alpha),   cos(alpha),  cos(alpha)*d],
+                [                   0,                 0,            0,            1]])
+    return TF
+```
+
+I used the following python code which calls the `TF_Matrix()` function above to create the individual transformation matrices for each joint.
 ```python
 
 # Define the symbols to be used in the kinematics equations
