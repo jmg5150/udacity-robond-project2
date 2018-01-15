@@ -21,6 +21,10 @@ January 11 2018
 [figure8]: ./figures/figure8.png 
 [projectsummary]: ./figures/projectsummary.png
 [tfmatrix]: ./figures/TFMatrix.png 
+[4inbin]: ./figures/stacked4inbin.png
+[6inbin]: ./figures/4stacked+2inbin.png
+[7inbin]: ./figures/5stacked+2inbin.png
+[8inbin]: ./figures/8of9inbin.png
 
 ![projectsummary]
 
@@ -204,3 +208,26 @@ Regrettably, in my attempt to split up the math between these two functions, I c
 
 So that brings me to the function added to the `KR210Kinematics` class titled `slowcompute()` -- this is the code that is actually being used to generate the Inverse Kinematics used in my working solution. This code begins on line 50 and ends at line 145 in the `IK_server.py` file. The code was developed from reviewing the material and examples discussed in KR210 Forward Kinematics parts 1, 2, and 3, of the course content, as well as the following lectures covering the Inverse Kinematics.
 
+#### Results:
+
+In order to demontrate that the code meets the performance criteria for a passing project, I ran a trial run in hopes to successfully place the item in the bin at least 8 times out of 10 attempts. The first screenshot I captured was after 4 items were placed into the bin.
+
+![4inbin]
+
+Note that they are stacked one on top of the other, which I knew would be interesting to what happens when the balance is lost.
+
+![6inbin]
+
+I took another screenshot after the 6th successful pick and place completed.
+
+![7inbin]
+
+With 7 in the bin, I decided I would then turn on screen capturing for what I hoped to be the final pick and place operation. However, with all the excitment of completing the project with a satisfactory implementation, I apparently clicked the "Next" button in Rviz too soon, which caused the the robot to begin the extraction maneuver before the grip operation had completed. This resulted in a failed attempt due to human error.
+
+You can view the failed attempt [here](https://youtu.be/Rsum34j34q8) if you want to share in the heartbreak and disappointment.
+
+However, I was not discouraged and begin the next cycle. The free screen capture software I am using has a 5 minute max length limitation, and when I realized there was a chance that there would not be enough time to see the end, I restarted a new capture beginning at the grip step of the last run. You can see this successful operation [here](https://youtu.be/b5hzOuW6PPM)
+
+![8inbin]
+
+There are 8 items in the bin, with a constant reminder of my mistake sitting up on the shelf :-P
