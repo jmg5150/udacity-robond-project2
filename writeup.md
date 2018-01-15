@@ -25,6 +25,8 @@ January 11 2018
 [6inbin]: ./figures/4stacked+2inbin.png
 [7inbin]: ./figures/5stacked+2inbin.png
 [8inbin]: ./figures/8of9inbin.png
+[theta1given]: ./figures/theta1given.gif
+[theta2given]: ./figures/theta2given.gif
 
 ![projectsummary]
 
@@ -196,9 +198,58 @@ self.theta6 = atan2(-self.R3_6[1,1], self.R3_6[1,0])
 
 Of particular note, you can see that I've commented out the use of Sympy's `inv("LU")` function and have replaced with the `transpose()` function. This was done during debugging per the suggestion of my course mentor. In the final version of my code which is working at the time of submission, the `transpose()` function was still being called, and if there's one thing I've learned in my engineering career: if something is not broke, don't fix it. If I had more time available for this project, I would dig into this a bit more, but in an effor to move forward with the course, I will leave it in it's current working form. 
 
+**UPDATE:**
+
+Additional details were requested regarding how to come up with the theta1 - theta6 joint angles:
+
+I followed the `Inverse Kinematics Example` to understand how to compute theta1, theta2, and theta3. Theta1 is given as
+![theta1given]
+
+where the first parameter y~c~ is the y coordinate of the wrist center, and x~c~ is the x coordinate of the wrist center, so in my code, it's written as shown below.
+```python
+self.theta1 = atan2(self.WC[1], self.WC[0]);
+```
+
+Finding theta2 is done by projecting links 2 and 3 onto the x-z plane, and again uses the `atan2` function.
+
+![theta2given]
+
+The calculations for parameters r and s are also given, making it easy to implement the solution for theta2 in code:
+```python
+self.theta2 = pi / 2 - self.angle_a - atan2(self.WC[2] - 0.75, sqrt(self.WC[0] * self.WC[0] + self.WC[1] * self.WC[1]) - 0.35)
+```
+
+Calculating theta4, theta5, and theta6 comes from the guidance shared in the `Euler Angles from a Rotation Matrix` lesson. The suggestions in this lesson indicate the reason why it's advantageous to use the `atan2` function to avoid ambiguities which arise when using inverse of sine and cosine. Following the example given in this lesson, I was able to construct the equations for these joint angles in my code. Originally given as just:
+```python
+self.theta4 = atan2(self.R3_6[2,2], -self.R3_6[0,2])
+self.theta5 = atan2(sqrt(self.R3_6[0,2] * self.R3_6[0,2] + self.R3_6[2,2]*self.R3_6[2,2]), self.R3_6[1,2])
+self.theta6 = atan2(-self.R3_6[1,1], self.R3_6[1,0])    
+```
+
+after the feedback I received from my first submission of this project, I updated theta4 and theta6 to be computed conditionally based on the positive/negative value of theta5 joint angle, as shown below:
+
+```python
+self.theta5 = atan2(sqrt(self.R3_6[0,2] * self.R3_6[0,2] + self.R3_6[2,2] * self.R3_6[2,2]), self.R3_6[1,2])
+
+if sin(self.theta5) < 0:
+
+    self.theta4 = atan2(-self.R3_6[2,2], self.R3_6[0,2])
+    self.theta6 = atan2(self.R3_6[1,1], -self.R3_6[1,0])
+
+else:
+
+    self.theta4 = atan2(self.R3_6[2,2], - self.R3_6[0,2])
+    self.theta6 = atan2(-self.R3_6[1,1], self.R3_6[1,0])
+```
+
+
+Note that I did watch the project walkthrough while I was working on debugging my code, for reasons described in further detail below.
+
 ### Project Implementation
 
 #### 1. Fill in the `IK_server.py` file with properly commented python code for calculating Inverse Kinematics based on previously performed Kinematic Analysis. Your code must guide the robot to successfully complete 8/10 pick and place cycles. Briefly discuss the code you implemented and your results. 
+
+**Please see the update below for details regarding the changes that have been implemented for the second submission.**
 
 My approach to completing the IK_server.py script was to first start to develop the code in the IK_debug.py script and run it against the three provided test cases. For this reason, I have included the `IK_debug.py` and `IK_debug2.py` files as part of this repository. More discussion on why there are two files to follow.
 
@@ -207,6 +258,29 @@ My initial thoughts were that a lot of the computation of the matrices only need
 Regrettably, in my attempt to split up the math between these two functions, I created a bit of a mess for myself which was a debugging nightmare and filled with red herrings. At one point, it appeared to be a mathematical error with the theta5 calculation, as it always appeared to be offset by 90degrees during the trial runs in gazebo. [This is why I ultimately created `IK_debug2.py` and used the joint_state_publisher sliders to collect two additional test cases from Rviz - these cases were specifically designed to look at theta5, further increasing the amount of red herrings I was encountering.] After two days of debugging my approach, and after having watched the project walk-through video several times to try to find my error, I simply gave up on my optimization and got my code working in a non-optimized way. Now, the computation time for computing the Inverse Kinematics is about 3 to 4 x more than I was targetting with my original code -- but at least I have achieved a working solution for submission so that I can continue to the next material covered in the course.
 
 So that brings me to the function added to the `KR210Kinematics` class titled `slowcompute()` -- this is the code that is actually being used to generate the Inverse Kinematics used in my working solution. This code begins on line 50 and ends at line 145 in the `IK_server.py` file. The code was developed from reviewing the material and examples discussed in KR210 Forward Kinematics parts 1, 2, and 3, of the course content, as well as the following lectures covering the Inverse Kinematics.
+
+
+**UPDATE:**
+
+Per feedback on the initial submission of this project, I've gone ahead and incorporated the feedback into my code. In order to clearly demonstrate the changes, I've created an second file titled `IK_server_updated.py` which is the the next revision of my code. There are two main changes that I incorporated into this revision. The first is to use Pickle files to optimize code performance. This resulted in ~50% faster execution than my previous `slowcompute()` function discussed above, and is actually in the spirit of my initial attempts of achieving a faster performing function. Using pickle files, I store the `T0_EE`, `R0_3`, and `ROT_EE` matrices such that they only need to be computed once.
+
+ The other change that I implemented is to compute theta5 joint angle first, and then based on the result, compute theta4 and theta6. This implementation can be found on lines 184 to 194 in `IK_server_updated.py`:
+
+
+```python
+self.theta5 = atan2(sqrt(self.R3_6[0,2] * self.R3_6[0,2] + self.R3_6[2,2] * self.R3_6[2,2]), self.R3_6[1,2])
+
+if sin(self.theta5) < 0:
+
+    self.theta4 = atan2(-self.R3_6[2,2], self.R3_6[0,2])
+    self.theta6 = atan2(self.R3_6[1,1], -self.R3_6[1,0])
+
+else:
+
+    self.theta4 = atan2(self.R3_6[2,2], - self.R3_6[0,2])
+    self.theta6 = atan2(-self.R3_6[1,1], self.R3_6[1,0])
+```
+
 
 #### Results:
 
